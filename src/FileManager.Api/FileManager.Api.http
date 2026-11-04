@@ -1,0 +1,6 @@
+@FileManager.Api_HostAddress = http://localhost:5080
+
+GET {{FileManager.Api_HostAddress}}/api/files
+Accept: application/json
+
+###

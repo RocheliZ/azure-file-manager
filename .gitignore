@@ -1,0 +1,17 @@
+# .NET
+bin/
+obj/
+publish/
+*.user
+.vs/
+
+# Frontend build output (built in CI)
+src/FileManager.Api/wwwroot/
+
+# Node
+node_modules/
+
+# Secrets / publish profiles
+*.PublishSettings
+*.pubxml
+.env
