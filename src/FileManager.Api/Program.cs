@@ -10,7 +10,12 @@ if (!string.IsNullOrWhiteSpace(builder.Configuration["APPLICATIONINSIGHTS_CONNEC
     builder.Services.AddOpenTelemetry().UseAzureMonitor();
 }
 
-builder.Services.Configure<StorageOptions>(builder.Configuration.GetSection(StorageOptions.SectionName));
+// Fail at startup (not on the first request) if the storage connection string is missing.
+builder.Services.AddOptions<StorageOptions>()
+    .Bind(builder.Configuration.GetSection(StorageOptions.SectionName))
+    .Validate(o => !string.IsNullOrWhiteSpace(o.ConnectionString),
+        "Storage:ConnectionString is not configured. Locally: dotnet user-secrets set Storage:ConnectionString <value>. In Azure: app setting Storage__ConnectionString.")
+    .ValidateOnStart();
 builder.Services.AddSingleton<IFileStorageService, BlobFileStorageService>();
 
 builder.Services.AddControllers();
